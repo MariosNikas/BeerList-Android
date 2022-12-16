@@ -21,7 +21,7 @@ class MainAdapter (val beers:List<Beer>) : RecyclerView.Adapter<MainAdapter.Main
             name.text = beer.name
             tagline.text = beer.tagline
             image.load(beer.image_url){
-                transformations(RoundedCornersTransformation())
+                transformations(RoundedCornersTransformation(5.0F, 5.0F, 5.0F, 5.0F ))
             }
 
 

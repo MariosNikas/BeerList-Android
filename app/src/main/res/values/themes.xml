@@ -2,7 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.BeerList4" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">@color/red3</item>
+        <item name="colorPrimaryDark">@color/red2</item>
         <!-- Customize your theme here. -->
     </style>
 </resources>
