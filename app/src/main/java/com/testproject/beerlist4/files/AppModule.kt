@@ -49,7 +49,7 @@ object AppModule {
     @Provides
     @Singleton
     //scope : single instance at all times
-    fun provideRepository(apiService: ApiService): Repository {
-        return Repository(apiService)
+    fun provideRepository(apiService: ApiService): Lazy<Repository> {
+        return lazy { Repository(apiService) }
     }
 }

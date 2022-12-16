@@ -3,6 +3,7 @@ package com.testproject.beerlist4.files
 
 import com.testproject.beerlist4.files.Beer
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -26,5 +27,5 @@ interface ApiService {
     //get request with to the path /beers where the records of the  beers are
     @GET("beers")
     //i can query the specific page of the list i want to get
-    fun fetchBeers(@Query("page")page:String) : Call<List<Beer>>
+    suspend fun fetchBeers(@Query("page")page:String) : Response<List<Beer>>
 }

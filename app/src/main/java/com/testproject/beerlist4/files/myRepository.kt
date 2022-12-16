@@ -7,5 +7,5 @@ import javax.inject.Singleton
 
 @Singleton
 class Repository @Inject constructor(private val apiService: ApiService) {
-    fun getBeers (page : String ) = apiService.fetchBeers(page)
+    suspend fun getBeers (page : String ) = apiService.fetchBeers(page)
 }
