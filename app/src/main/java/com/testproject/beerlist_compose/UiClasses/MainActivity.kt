@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,7 +38,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    MainActivityComposable(viewModel)
+                    MainActivityComposable(viewModel,0)
                 }
             }
         }
@@ -45,8 +46,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainActivityComposable(viewModel : MainViewModel) {
-    val beers = remember {viewModel.beerList.value}
+fun MainActivityComposable(viewModel : MainViewModel, page: Int) {
+    val beersState = viewModel.beerList.observeAsState()
+    val beers = beersState.value
     lazyColllumn(beers)
 }
 
@@ -75,6 +77,7 @@ fun lazyColllumn(beers: List<Beer>?){
 
     }
 }
+
 @Composable
 fun lazyCollumnitem(beer: Beer, onclickfun : (Beer)-> Unit) {
     Surface(modifier = Modifier.clickable { onclickfun(beer)}) {
@@ -99,11 +102,3 @@ fun lazyCollumnitem(beer: Beer, onclickfun : (Beer)-> Unit) {
 }
 }
 
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    BeerListcomposeTheme {
-        //MainActivityComposable(model = viewModel(initializer = ))
-    }
-}
