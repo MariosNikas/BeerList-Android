@@ -18,7 +18,6 @@ data class Beer(
     val first_brewed: String,
     @Json (name = "description")
     val description: String,
-    var expanded : Boolean = false
 )
 
 

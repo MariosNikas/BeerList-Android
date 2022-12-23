@@ -60,8 +60,14 @@ fun lazyColllumn(beers: List<Beer>?){
             if (beers != null) {
                 items(beers){ beer  ->
                     lazyCollumnitem(beer = beer){
+                        val intent = Intent(context, detailsActivity::class.java)
+                        intent.putExtra("name", it.name)
+                        intent.putExtra("description", it.description)
+                        intent.putExtra("tagline", it.tagline)
+                        intent.putExtra("image_url", it.image_url)
+                        intent.putExtra("brewed", it.first_brewed)
                         Toast.makeText(context, it.name, Toast.LENGTH_LONG).show()
-                        context.startActivity(Intent(context,detailsActivity::class.java))
+                        context.startActivity(intent)
                     }
                 }
             }
@@ -77,7 +83,8 @@ fun lazyCollumnitem(beer: Beer, onclickfun : (Beer)-> Unit) {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp).border(3.dp, MaterialTheme.colors.primary, RoundedCornerShape(6))
+                .padding(16.dp)
+                .border(3.dp, MaterialTheme.colors.primary, RoundedCornerShape(6))
         ) {
             AsyncImage(
                 model = beer.image_url,
