@@ -8,12 +8,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.testproject.beerlist_compose.domain.Beer
 
 @Composable
-fun DetailsScreen(beer: Beer = Beer("1", "name", "tagline", "image", "01/01/2001", "description")){
+fun DetailsScreen(beer: Beer = Beer("1", "name", "ERROR", "image", "01/01/2001", "description")){
 
     val name = beer.name
     val description = beer.description
@@ -30,28 +31,22 @@ fun DetailsScreen(beer: Beer = Beer("1", "name", "tagline", "image", "01/01/2001
             contentDescription = null,
             modifier = Modifier.padding(16.dp)
         )
-        if (name != null) {
-            Text(
-                style = MaterialTheme.typography.h4,
-                text = name,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
-        }
-        if (tagline != null) {
-            Text(style = MaterialTheme.typography.subtitle1, text = tagline)
-        }
-        if (description != null) {
-            Text(
-                style = MaterialTheme.typography.subtitle2,
-                text = description,
-                modifier = Modifier
-                    .width(IntrinsicSize.Max)
-                    .padding(16.dp)
-                    .align(Alignment.CenterHorizontally)
-            )
-        }
-        if (brewed != null) {
-            Text(style = MaterialTheme.typography.subtitle2, text = "brewed on: $brewed")
-        }
+        Text(
+            style = MaterialTheme.typography.h4,
+            text = name,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
+        Text(style = MaterialTheme.typography.subtitle1,text = tagline ,textAlign = TextAlign.Center,modifier = Modifier.align(Alignment.CenterHorizontally ))
+        Text(
+            style = MaterialTheme.typography.subtitle2,
+            text = description,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .width(IntrinsicSize.Max)
+                .padding(16.dp)
+                .align(Alignment.CenterHorizontally)
+        )
+        Text(style = MaterialTheme.typography.subtitle2, text = "brewed on: $brewed")
     }
 }

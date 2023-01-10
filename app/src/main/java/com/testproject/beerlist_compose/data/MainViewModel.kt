@@ -16,7 +16,7 @@ import javax.inject.Inject
 //private val repository : Repository = Repository(AppModule.apiService)
 class MainViewModel @Inject constructor(private val repository: Lazy<Repository>) : ViewModel() {
     // it will post updates when there is a change
-    private var page: Int = 1
+
     private var _beerList = MutableLiveData<List<Beer>>()
 
     // mutable live data list can only be observed not changed
@@ -25,20 +25,11 @@ class MainViewModel @Inject constructor(private val repository: Lazy<Repository>
     //call fatchbeer to make the api call using the repository class
     init {
         viewModelScope.launch(Dispatchers.Main) {
-            fetchBeer(repository, _beerList, page)
+            fetchBeer(repository, _beerList, 1)
         }
     }
 
-    suspend fun changePage(page: Int) {
-        if (this.page != page) {
-            this.page = page
-            fetchBeer(repository, _beerList, page)
-        }
-    }
 
-    fun getpage(): Int {
-        return page
-    }
 
 }
 

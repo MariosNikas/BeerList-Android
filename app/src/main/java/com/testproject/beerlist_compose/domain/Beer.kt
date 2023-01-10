@@ -1,11 +1,14 @@
 package com.testproject.beerlist_compose.domain
 
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.parcelize.Parcelize
 
 @JsonClass(generateAdapter = true)
-data class Beer(
+@Parcelize
+data class Beer (
     @Json(name="id")
     val id : String,
     @Json(name="name")
@@ -18,7 +21,7 @@ data class Beer(
     val first_brewed: String,
     @Json (name = "description")
     val description: String,
-)
+):Parcelable
 
 
 

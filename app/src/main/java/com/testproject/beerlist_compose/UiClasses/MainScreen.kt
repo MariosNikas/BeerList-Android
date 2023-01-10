@@ -1,7 +1,5 @@
 package com.testproject.beerlist_compose.UiClasses
 
-import android.content.Intent
-import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
@@ -24,12 +21,12 @@ import com.testproject.beerlist_compose.domain.Beer
 fun MainScreen(viewModel: MainViewModel, navController: NavController){
     val beersState = viewModel.beerList.observeAsState()
     val beers = beersState.value
-    lazyColllumn(beers, navController)
+    LazyColllumn(beers, navController)
 }
 
 
 @Composable
-fun lazyColllumn(beers: List<Beer>?, navController: NavController) {
+fun LazyColllumn(beers: List<Beer>?, navController: NavController) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -41,9 +38,11 @@ fun lazyColllumn(beers: List<Beer>?, navController: NavController) {
         LazyColumn(contentPadding = innerPadding, modifier = Modifier.fillMaxSize()) {
             if (beers != null) {
                 items(beers) { beer ->
-                    lazyCollumnitem(beer = beer) {
-                        navController.navigate(route = Screen.Details.passBeer(beer))
-                    }
+                    LazyCollumnitem(beer = beer, onclickfun = {
+                        navController.currentBackStackEntry?.savedStateHandle?.set("beer", beer)
+                        navController.navigate(Screen.Details.route)
+
+                    })
                 }
             }
         }
@@ -52,7 +51,7 @@ fun lazyColllumn(beers: List<Beer>?, navController: NavController) {
 }
 
 @Composable
-fun lazyCollumnitem(beer: Beer, onclickfun: (Beer) -> Unit) {
+fun LazyCollumnitem(beer: Beer, onclickfun: (Beer) -> Unit) {
     Surface(modifier = Modifier.clickable { onclickfun(beer) }) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(20.dp),
