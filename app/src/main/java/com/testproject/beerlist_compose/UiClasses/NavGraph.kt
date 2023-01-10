@@ -17,7 +17,9 @@ fun SetUpNavGraph(
         composable(
             route = Screen.Main.route
         ){
-            MainScreen(viewModel, navController)
+            MainScreen(viewModel, onclickfun = {
+                navController.currentBackStackEntry?.savedStateHandle?.set("beer", it)
+                navController.navigate(Screen.Details.route)})
         }
         composable(route = Screen.Details.route){
            val beer = navController.previousBackStackEntry?.savedStateHandle?.get<Beer>("beer")

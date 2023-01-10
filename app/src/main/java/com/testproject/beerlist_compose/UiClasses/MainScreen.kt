@@ -12,21 +12,14 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.testproject.beerlist_compose.data.MainViewModel
 import com.testproject.beerlist_compose.domain.Beer
 
 @Composable
-fun MainScreen(viewModel: MainViewModel, navController: NavController){
+fun MainScreen(viewModel: MainViewModel, onclickfun: (Beer) -> Unit){
     val beersState = viewModel.beerList.observeAsState()
     val beers = beersState.value
-    LazyColllumn(beers, navController)
-}
-
-
-@Composable
-fun LazyColllumn(beers: List<Beer>?, navController: NavController) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -38,9 +31,8 @@ fun LazyColllumn(beers: List<Beer>?, navController: NavController) {
         LazyColumn(contentPadding = innerPadding, modifier = Modifier.fillMaxSize()) {
             if (beers != null) {
                 items(beers) { beer ->
-                    LazyCollumnitem(beer = beer, onclickfun = {
-                        navController.currentBackStackEntry?.savedStateHandle?.set("beer", beer)
-                        navController.navigate(Screen.Details.route)
+                    lazyCollumnitem(beer = beer, onclickItem = {
+                        onclickfun(it)
 
                     })
                 }
@@ -51,8 +43,8 @@ fun LazyColllumn(beers: List<Beer>?, navController: NavController) {
 }
 
 @Composable
-fun LazyCollumnitem(beer: Beer, onclickfun: (Beer) -> Unit) {
-    Surface(modifier = Modifier.clickable { onclickfun(beer) }) {
+fun lazyCollumnitem(beer: Beer, onclickItem: (Beer) -> Unit) {
+    Surface(modifier = Modifier.clickable { onclickItem(beer) }) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(20.dp),
             verticalAlignment = Alignment.CenterVertically,
