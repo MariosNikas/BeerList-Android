@@ -22,6 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.testproject.beerlist_compose.data.MainViewModel
 import com.testproject.beerlist_compose.domain.Beer
@@ -30,75 +32,20 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    lateinit var navController : NavHostController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val viewModel : MainViewModel by viewModels()
+        val viewModel: MainViewModel by viewModels()
         setContent {
             BeerListcomposeTheme {
+                navController = rememberNavController()
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    MainActivityComposable(viewModel,0)
+                    SetUpNavGraph(navController = navController, viewModel = viewModel)
                 }
             }
         }
     }
 }
-
-@Composable
-fun MainActivityComposable(viewModel : MainViewModel, page: Int) {
-    val beersState = viewModel.beerList.observeAsState()
-    val beers = beersState.value
-    lazyColllumn(beers)
-}
-
-
-
-@Composable
-fun lazyColllumn(beers: List<Beer>?){
-    val context = LocalContext.current
-    Scaffold (topBar = { TopAppBar(title = {Text("The list of Beers from the punkapi")},backgroundColor = MaterialTheme.colors.background)  },){ innerPadding ->
-        LazyColumn(contentPadding = innerPadding, modifier = Modifier.fillMaxSize()){
-            if (beers != null) {
-                items(beers){ beer  ->
-                    lazyCollumnitem(beer = beer){
-                        val intent = Intent(context, detailsActivity::class.java)
-                        intent.putExtra("name", it.name)
-                        intent.putExtra("description", it.description)
-                        intent.putExtra("tagline", it.tagline)
-                        intent.putExtra("image_url", it.image_url)
-                        intent.putExtra("brewed", it.first_brewed)
-                        Toast.makeText(context, it.name, Toast.LENGTH_LONG).show()
-                        context.startActivity(intent)
-                    }
-                }
-            }
-        }
-
-    }
-}
-
-@Composable
-fun lazyCollumnitem(beer: Beer, onclickfun : (Beer)-> Unit) {
-    Surface(modifier = Modifier.clickable { onclickfun(beer)}) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(20.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .border(3.dp, MaterialTheme.colors.primary, RoundedCornerShape(6))
-        ) {
-            AsyncImage(
-                model = beer.image_url,
-                contentDescription = null,
-                modifier = Modifier.padding(16.dp)
-            )
-            Column(modifier = Modifier.padding(all = 8.dp)) {
-                Text(text = beer.name, style = MaterialTheme.typography.h5)
-                Text(text = beer.tagline)
-            }
-    }
-}
-}
-
