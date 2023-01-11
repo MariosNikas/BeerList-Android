@@ -25,7 +25,7 @@ class MainViewModel @Inject constructor(private val repository: Lazy<Repository>
     //call fatchbeer to make the api call using the repository class
     init {
         viewModelScope.launch(Dispatchers.Main) {
-            fetchBeer(repository, _beerList, 1)
+            fetchBeers(repository, _beerList, 1)
         }
     }
 
@@ -33,7 +33,7 @@ class MainViewModel @Inject constructor(private val repository: Lazy<Repository>
 
 }
 
-private suspend fun fetchBeer(
+private suspend fun fetchBeers(
     repository: Lazy<Repository>,
     beerList: MutableLiveData<List<Beer>>,
     page: Int

@@ -10,12 +10,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.testproject.beerlist_compose.data.DetailsViewModel
 import com.testproject.beerlist_compose.domain.Beer
+
 
 @Composable
 fun DetailsScreen(beer: Beer = Beer("1", "name", "ERROR", "image", "01/01/2001", "description")){
-
     val name = beer.name
     val description = beer.description
     val brewed = beer.first_brewed

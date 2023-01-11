@@ -1,6 +1,9 @@
 package com.testproject.beerlist_compose.domain
 
 
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.google.gson.Gson
 import com.testproject.beerlist_compose.data.ApiService
 import dagger.Module
