@@ -25,16 +25,15 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun DetailsScreen(id : Int){
-    val viewModel: DetailsViewModel = hiltViewModel()
+fun DetailsScreen(viewModel: DetailsViewModel = hiltViewModel()){
     val beer  = viewModel.beer.observeAsState()
 
     if (beer.value!=null) {
-        val name = beer.value!!.name
-        val description = beer.value!!.description
-        val brewed = beer.value!!.first_brewed
-        val tagline = beer.value!!.tagline
-        val image_url = beer.value!!.image_url
+        val name = beer.value!!.get(0).name
+        val description = beer.value!!.get(0).description
+        val brewed = beer.value!!.get(0).first_brewed
+        val tagline = beer.value!!.get(0).tagline
+        val image_url = beer.value!!.get(0).image_url
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp),

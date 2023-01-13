@@ -18,8 +18,7 @@ import com.testproject.beerlist_compose.data.MainViewModel
 import com.testproject.beerlist_compose.domain.Beer
 
 @Composable
-fun MainScreen( onclickfun: (Beer) -> Unit){
-    val viewModel: MainViewModel = hiltViewModel()
+fun MainScreen( viewModel: MainViewModel = hiltViewModel() ,onclickfun: (Beer) -> Unit){
     val beersState = viewModel.beerList.observeAsState()
     val beers = beersState.value
     Scaffold(
