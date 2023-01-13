@@ -20,8 +20,7 @@ class MainActivity : ComponentActivity() {
     lateinit var navController : NavHostController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val viewModelMain: MainViewModel by viewModels()
-        val viewModelDetails: DetailsViewModel by viewModels()
+
 
         setContent {
             BeerListcomposeTheme {
@@ -29,7 +28,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    SetUpNavGraph(navController = navController, viewModelMain = viewModelMain, viewmodelDetails= viewModelDetails)
+                    SetUpNavGraph(navController)
                 }
             }
         }

@@ -12,12 +12,14 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.testproject.beerlist_compose.data.MainViewModel
 import com.testproject.beerlist_compose.domain.Beer
 
 @Composable
-fun MainScreen(viewModel: MainViewModel, onclickfun: (Beer) -> Unit){
+fun MainScreen( onclickfun: (Beer) -> Unit){
+    val viewModel: MainViewModel = hiltViewModel()
     val beersState = viewModel.beerList.observeAsState()
     val beers = beersState.value
     Scaffold(

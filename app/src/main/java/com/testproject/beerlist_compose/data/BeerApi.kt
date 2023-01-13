@@ -31,5 +31,5 @@ interface ApiService {
     suspend fun fetchBeers(@Query("page")page:String) : Response<List<Beer>>
     @GET("beers/{id}")
     //i can query the specific page of the list i want to get
-    suspend fun fetchBeer(@Path("id")id:Int) : Response<Beer>
+    suspend fun fetchBeer(@Path("id")id:String) : Response<Beer>
 }
