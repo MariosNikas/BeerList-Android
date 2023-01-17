@@ -11,8 +11,8 @@ import retrofit2.http.Query
 interface ApiService {
     //get request with to the path /beers where the records of the  beers are
     @GET("beers")
-    //i can query the specific page of the list i want to get
-    suspend fun fetchBeers(@Query("page")page:String) : Response<List<Beer>>
+    // i can query the specific page of the list i want to get
+   suspend fun fetchBeers(@Query("page")page:String) : Response<List<Beer>>
     @GET("beers/{id}")
     //i can query the specific page of the list i want to get
     suspend fun fetchBeer(@Path("id")id:String) : Response<List<Beer>>

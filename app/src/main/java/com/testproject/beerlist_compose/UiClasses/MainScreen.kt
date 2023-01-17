@@ -1,5 +1,6 @@
 package com.testproject.beerlist_compose.UiClasses
 
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -8,19 +9,25 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import com.testproject.beerlist_compose.data.MainViewModel
 import com.testproject.beerlist_compose.domain.Beer
+import kotlinx.coroutines.flow.Flow
 
 @Composable
-fun MainScreen( viewModel: MainViewModel = hiltViewModel() ,onclickfun: (Beer) -> Unit){
-    val beersState = viewModel.beerList.observeAsState()
-    val beers = beersState.value
+fun MainScreen(viewModel: MainViewModel = hiltViewModel(), onclickfun: (Beer) -> Unit
+){
+    val beers : LazyPagingItems<Beer> = viewModel.flow.collectAsLazyPagingItems()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -30,18 +37,13 @@ fun MainScreen( viewModel: MainViewModel = hiltViewModel() ,onclickfun: (Beer) -
         },
     ) { innerPadding ->
         LazyColumn(contentPadding = innerPadding, modifier = Modifier.fillMaxSize()) {
-            if (beers != null) {
                 items(beers) { beer ->
-                    lazyCollumnitem(beer = beer, onclickItem = {
-                        onclickfun(it)
-
-                    })
-                }
-            }
+                    lazyCollumnitem(beer = beer!!, onclickItem ={onclickfun(beer)} )}
+                    }}
         }
 
-    }
-}
+
+
 
 @Composable
 fun lazyCollumnitem(beer: Beer, onclickItem: (Beer) -> Unit) {
