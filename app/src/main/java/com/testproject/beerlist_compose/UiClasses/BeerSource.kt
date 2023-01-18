@@ -4,10 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.testproject.beerlist_compose.data.ApiService
 import com.testproject.beerlist_compose.domain.Beer
-import com.testproject.beerlist_compose.domain.Repository
-import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.HttpException
-import retrofit2.Response
 import java.io.IOException
 import javax.inject.Inject
 

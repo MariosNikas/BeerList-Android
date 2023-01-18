@@ -37,7 +37,7 @@ private suspend fun fetchBeer(
 {
     val response = repository.value.getBeer(beerId)
     if (response.isSuccessful && response.body() !=null) {
-        Log.d("response1", response.body().toString())
+        Log.d("responseDetails", response.body().toString())
         beer.postValue(response.body()!!.get(0) )
     } else {
         Log.d("error", response.message())
