@@ -36,7 +36,7 @@ class MainViewModel @Inject constructor(private  val apiService: ApiService, pri
     ) : List<Beer>? {
         val response = repository.SearchBeers(dateFrom,dateTo)
         if (response.isSuccessful) {
-            Log.d("response", response.body().toString())
+            Log.d("response search", response.body().toString())
         } else {
             Log.d("error", response.message())
         }

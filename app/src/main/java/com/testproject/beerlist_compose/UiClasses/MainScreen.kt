@@ -21,14 +21,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import com.testproject.beerlist_compose.data.MainViewModel
 import com.testproject.beerlist_compose.domain.Beer
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.collections.List
 
 @Composable
 fun MainScreen(viewModel: MainViewModel = hiltViewModel(), onclickfun: (Beer) -> Unit
@@ -120,26 +124,25 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel(), onclickfun: (Beer) ->
 
                 ExtendedFloatingActionButton(
                     onClick = {
-                        if (!searchMode.value) {
-                            //DATES ARE NOT PASSED IN THE ONCLICK ????
+                        coroutineScope.async {
+                            if (!searchMode.value) {
+                                //DATES ARE NOT PASSED IN THE ONCLICK ????
+
+
                                 Log.d("dates", "${fromDate.value}   ${toDate.value} ")
-                                coroutineScope.launch {
-                                    Log.d("responseSearch1", viewModel.SearchBeers(fromDate.value, toDate.value)!!.toString())
-                                    for (beer in viewModel.SearchBeers(fromDate.value, toDate.value)!!) {
-                                        searchBeers.add(beer)
-                                        Log.d("responseSearch2", beer.toString())
+                                val beerList: List<Beer> =
+                                    viewModel.SearchBeers(fromDate.value, toDate.value)!!
+                                for (beer in beerList) {
+                                    searchBeers.add(beer)
+                                    Log.d("responseSearch2", beer.toString())
 
-                                    }
                                 }
-                        }
-                        else
-                        {
-                            searchBeers.clear()
-                        }
-                        searchMode.value=!searchMode.value
 
-                        fromDate.value =""
-                        toDate.value=""
+                            } else {
+                                searchBeers.clear()
+                            }
+                            searchMode.value = !searchMode.value
+                        }
                     },
                     modifier = Modifier.weight(1f).background(color = Color.Green),
                     icon = {
