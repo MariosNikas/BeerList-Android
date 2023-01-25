@@ -32,48 +32,27 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun MainScreen(viewModel: MainViewModel = hiltViewModel(), onclickfun: (Beer) -> Unit
-){
-
-
-
-
-    //var searchBeers = remember{ mutableStateListOf<Beer>() }
-    // Fetching the Local Context
+fun MainScreen(
+    viewModel: MainViewModel = hiltViewModel(),
+    onclickfun: (Beer) -> Unit
+) {
     val mContext = LocalContext.current
-    //val coroutineScope = rememberCoroutineScope()
-
-//    var searchMode = remember {
-//        mutableStateOf(viewModel.searchMode.value)
-//    }
-//    var toDate = remember {
-//        mutableStateOf(viewModel.toDate.value)
-//    }
-//    var fromDate = remember {
-//        mutableStateOf(viewModel.toDate.value)
-//    }
-
     val fromDatePickerDialog = DatePickerDialog(
         mContext,
         { _: DatePicker, fromYear: Int, fromMonth: Int, _: Int ->
-            viewModel.fromDate.value= "${fromMonth+1}-$fromYear"
-            //fromDate.value=viewModel.FromDate.value
+            viewModel.fromDate.value = "${fromMonth + 1}-$fromYear"
         }, viewModel.fromYear, viewModel.fromMonth, viewModel.fromDay
     )
-
     val toDatePickerDialog = DatePickerDialog(
         mContext,
         { _: DatePicker, toYear: Int, toMonth: Int, _: Int ->
-            viewModel.toDate.value = "${toMonth+1}-$toYear"
-            //toDate.value=viewModel.toDate.value
+            viewModel.toDate.value = "${toMonth + 1}-$toYear"
         }, viewModel.toYear, viewModel.toMonth, viewModel.toDay
     )
-
-
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("The list of Beers from the punkapi "+viewModel.searchMode.value) },
+                title = { Text("The list of Beers from the punkapi ") },
                 backgroundColor = MaterialTheme.colors.background
             )
         },
@@ -111,21 +90,23 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel(), onclickfun: (Beer) ->
                         fontSize = 12.sp
                     )
                 }
-                Button(onClick = { viewModel.resetDates()},
-                    modifier= Modifier.weight(0.5f),
+                Button(
+                    onClick = { viewModel.resetDates() },
+                    modifier = Modifier.weight(0.5f),
                     shape = CircleShape,
                     contentPadding = PaddingValues(0.dp),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color(0XFF0F9D58))
                 ) {
-                    Icon(Icons.Default.ArrowBack ,contentDescription = "reset dates", tint=Color(0xFFFFFFFF))
+                    Icon(
+                        Icons.Default.ArrowBack,
+                        contentDescription = "reset dates",
+                        tint = Color(0xFFFFFFFF)
+                    )
                 }
-
                 ExtendedFloatingActionButton(
                     onClick = {
                         viewModel.viewModelScope.launch {
                             viewModel.onSearch()
-                            //viewModel.fromDate.value=null
-                            //viewModel.toDate.value=null
                         }
 
                     },
@@ -147,45 +128,41 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel(), onclickfun: (Beer) ->
                         if (viewModel.searchMode.value && (viewModel.toDate.value == null && viewModel.fromDate.value == null)) Text(
                             text = "Refresh",
                             fontSize = 12.sp
-                        ) else Text(text = "Search",
-                            fontSize = 12.sp)
+                        ) else Text(
+                            text = "Search",
+                            fontSize = 12.sp
+                        )
                     }
                 )
-
             }
-            //viewModel.updatePager()
+            // without the if it doesnt recompose with the searched list when the search is done
             if (viewModel.searchMode.value) {
                 val beers = viewModel.flow.collectAsLazyPagingItems()
                 LazyCollumn(beers, paddingValues = innerPadding, onclickfun = onclickfun)
 
-            }
-            else {
+            } else {
                 val beers = viewModel.flow.collectAsLazyPagingItems()
                 LazyCollumn(beers, paddingValues = innerPadding, onclickfun = onclickfun)
             }
         }
-                }
-            }
-
-
-
-
-
-@Composable
-fun LazyCollumn(beers: LazyPagingItems<Beer>, paddingValues: PaddingValues, onclickfun: (Beer) -> Unit) {
-    //val beers = viewmodel.flow.collectAsLazyPagingItems()
-    LazyColumn(contentPadding = paddingValues, modifier = Modifier.fillMaxSize()) {
-        // if (!searchMode.value){
-        items(beers) { beer ->
-            lazyCollumnitem(beer = beer!!, onclickItem ={onclickfun(beer)} )}
     }
 }
 
-
-
+@Composable
+fun LazyCollumn(
+    beers: LazyPagingItems<Beer>,
+    paddingValues: PaddingValues,
+    onclickfun: (Beer) -> Unit
+) {
+    LazyColumn(contentPadding = paddingValues, modifier = Modifier.fillMaxSize()) {
+        items(beers) { beer ->
+            LazyCollumnitem(beer = beer!!, onclickItem = { onclickfun(beer) })
+        }
+    }
+}
 
 @Composable
-fun lazyCollumnitem(beer: Beer, onclickItem: (Beer) -> Unit) {
+fun LazyCollumnitem(beer: Beer, onclickItem: (Beer) -> Unit) {
     Surface(modifier = Modifier.clickable { onclickItem(beer) }) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(20.dp),

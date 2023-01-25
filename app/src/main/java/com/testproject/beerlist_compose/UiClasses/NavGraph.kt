@@ -1,33 +1,32 @@
 package com.testproject.beerlist_compose.UiClasses
 
 import androidx.compose.runtime.Composable
-import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.createSavedStateHandle
-import androidx.navigation.*
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.testproject.beerlist_compose.data.DetailsViewModel
-import com.testproject.beerlist_compose.data.MainViewModel
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
+import androidx.navigation.navArgument
 
+
+//navigation graph class containing the logic for the navigation between the 2 screens
 @Composable
 fun SetUpNavGraph(
     navController: NavHostController,
-){
+) {
     NavHost(navController = navController, startDestination = Screen.Main.route)
     {
         composable(
             route = Screen.Main.route
-        ){
-            MainScreen( onclickfun = {
-                navController.navigate("Details_Screen/"+it.id)})
+        ) {
+            MainScreen(onclickfun = {
+                navController.navigate("Details_Screen/" + it.id)
+            })
         }
         composable(
             route = Screen.Details.route,
-            arguments = listOf(navArgument("id"){type = NavType.IntType})
-        ){
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+        ) {
             DetailsScreen()
+        }
     }
-}
 }

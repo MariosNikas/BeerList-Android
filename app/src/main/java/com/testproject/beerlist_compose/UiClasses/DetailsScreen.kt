@@ -15,13 +15,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.testproject.beerlist_compose.data.DetailsViewModel
 
-
-
 @Composable
-fun DetailsScreen(viewModel: DetailsViewModel = hiltViewModel()){
-    val beer  = viewModel.beer.observeAsState()
+fun DetailsScreen(viewModel: DetailsViewModel = hiltViewModel()) {
+    val beer = viewModel.beer.observeAsState()
 
-    if (beer.value!=null) {
+    if (beer.value != null) {
         val name = beer.value!!.name
         val description = beer.value!!.description
         val brewed = beer.value!!.first_brewed
@@ -58,7 +56,9 @@ fun DetailsScreen(viewModel: DetailsViewModel = hiltViewModel()){
                     .padding(16.dp)
                     .align(Alignment.CenterHorizontally)
             )
-            Text(style = MaterialTheme.typography.subtitle2, text = "brewed on: $brewed")
+            Text(
+                style = MaterialTheme.typography.subtitle2,
+                text = "brewed on: $brewed")
         }
     }
 }
