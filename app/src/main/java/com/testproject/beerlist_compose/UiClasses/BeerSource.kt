@@ -10,8 +10,9 @@ import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
-class BeerSource @Inject constructor(private  val apiService: ApiService, private val viewModel: MainViewModel): PagingSource<Int, Beer>()  {
+class BeerSource @Inject constructor(private  val apiService: ApiService, private var fromDate: String?, private var toDate: String?, private var searchMode : Boolean): PagingSource<Int, Beer>()  {
     val beersPerPage =25
+    var page =1
     override fun getRefreshKey(state: PagingState<Int, Beer>): Int?
     {
         return state.anchorPosition?.let { anchorPosition ->
@@ -22,7 +23,7 @@ class BeerSource @Inject constructor(private  val apiService: ApiService, privat
 
     override suspend fun load(params: LoadParams<Int>):LoadResult<Int, Beer> {
         return try {
-            if (!viewModel.searchMode.value) {
+            if (!searchMode) {
                 val nextPage = params.key ?: 1
                 val beerList = apiService.fetchBeers(nextPage.toString())
                 Log.d("fetchBeers", beerList.body().toString())
@@ -33,17 +34,15 @@ class BeerSource @Inject constructor(private  val apiService: ApiService, privat
                         .last().id.toInt() / beersPerPage + 1)
                 )
             }
-            //beerList.body()!!.indexOf(beerList.body()!!.last()) / beersPerPage + 1
             else
             {
                 val nextPage = params.key ?: 1
-                val beerList = apiService.searchBeers(viewModel.fromDate.value,viewModel.toDate.value,nextPage.toString())
-                Log.d("searchBeers", "${viewModel.fromDate.value} ${viewModel.toDate.value} ${beerList.body().toString()}")
+                val beerList = apiService.searchBeers(fromDate,toDate,nextPage.toString())
+                Log.d("searchBeers", "${beerList.body()!!.size} ${fromDate} ${toDate} ${beerList.body().toString()}")
                 LoadResult.Page(
                     data = beerList.body()!!,
                     prevKey = if (nextPage == 1) null else nextPage - 1,
-                    nextKey = if (beerList.body()!!.isEmpty()) null else (beerList.body()!!
-                        .last().id.toInt() / beersPerPage + 1)
+                    nextKey = if (beerList.body()!!.isEmpty()) null else (++page)
                 )
 
             }

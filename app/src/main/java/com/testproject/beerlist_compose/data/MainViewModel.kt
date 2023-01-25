@@ -25,8 +25,8 @@ class MainViewModel @Inject constructor(private  val apiService: ApiService, pri
     var toMonth:Int
     var toDate: MutableState<String?> = mutableStateOf(null)
     var fromDate: MutableState<String?> = mutableStateOf(null)
-    val fromCalendar = Calendar.getInstance()
-    val toCalendar = Calendar.getInstance()
+    private val fromCalendar: Calendar = Calendar.getInstance()
+    private val toCalendar = Calendar.getInstance()
     var searchMode: MutableState<Boolean> = mutableStateOf(false)
 
 
@@ -35,7 +35,7 @@ class MainViewModel @Inject constructor(private  val apiService: ApiService, pri
         // PagingConfig, such as prefetchDistance.
         PagingConfig(pageSize = 25)
     ) {
-        BeerSource(apiService = apiService, this)
+        BeerSource(apiService = apiService, this.fromDate.value, this.toDate.value, this.searchMode.value)
     }.flow.cachedIn(viewModelScope)
 
     init {
@@ -55,6 +55,11 @@ class MainViewModel @Inject constructor(private  val apiService: ApiService, pri
                 //var beerList: List<Beer>
                 searchMode.value = !searchMode.value
             }
+            else{
+                //this is ugly but it works
+                searchMode.value = !searchMode.value
+                searchMode.value = !searchMode.value
+            }
         } else if (searchMode.value){
             searchMode.value= !searchMode.value
         }
@@ -64,17 +69,20 @@ class MainViewModel @Inject constructor(private  val apiService: ApiService, pri
         // when these 2 lines are commented it works
     }
 
-    fun updatePager() {
+    private fun updatePager() {
         flow = Pager(
             // Configure how data is loaded by passing additional properties to
             // PagingConfig, such as prefetchDistance.
             PagingConfig(pageSize = 25)
         ) {
-            BeerSource(apiService = apiService, this)
+            BeerSource(apiService = apiService, this.fromDate.value, this.toDate.value, this.searchMode.value)
         }.flow.cachedIn(viewModelScope)
     }
 
-
+    fun resetDates(){
+        fromDate.value=null
+        toDate.value=null
+    }
 
 
 

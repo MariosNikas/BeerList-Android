@@ -6,9 +6,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
@@ -17,13 +19,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import com.testproject.beerlist_compose.data.MainViewModel
 import com.testproject.beerlist_compose.domain.Beer
-import java.util.*
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -85,11 +90,12 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel(), onclickfun: (Beer) ->
                     onClick = {
                         fromDatePickerDialog.show()
                     }, colors = ButtonDefaults.buttonColors(backgroundColor = Color(0XFF0F9D58)),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(0.8f)
                 ) {
                     Text(
                         text = if (viewModel.fromDate.value != null) "from: \n${viewModel.fromDate.value}" else "date from",
-                        color = Color.White
+                        color = Color.White,
+                        fontSize = 12.sp
                     )
                 }
                 Button(
@@ -97,19 +103,31 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel(), onclickfun: (Beer) ->
                         toDatePickerDialog.show()
                     },
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color(0XFF0F9D58)),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(0.8f)
                 ) {
                     Text(
                         text = if (viewModel.toDate.value != null) "to: \n${viewModel.toDate.value}" else "date to",
-                        color = Color.White
+                        color = Color.White,
+                        fontSize = 12.sp
                     )
+                }
+                Button(onClick = { viewModel.resetDates()},
+                    modifier= Modifier.weight(0.5f),
+                    shape = CircleShape,
+                    contentPadding = PaddingValues(0.dp),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0XFF0F9D58))
+                ) {
+                    Icon(Icons.Default.ArrowBack ,contentDescription = "reset dates", tint=Color(0xFFFFFFFF))
                 }
 
                 ExtendedFloatingActionButton(
                     onClick = {
-                        viewModel.onSearch()
-                        //viewModel.fromDate.value=null
-                        //viewModel.toDate.value=null
+                        viewModel.viewModelScope.launch {
+                            viewModel.onSearch()
+                            //viewModel.fromDate.value=null
+                            //viewModel.toDate.value=null
+                        }
+
                     },
                     modifier = Modifier
                         .weight(1f),
@@ -127,18 +145,25 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel(), onclickfun: (Beer) ->
                     },
                     text = {
                         if (viewModel.searchMode.value && (viewModel.toDate.value == null && viewModel.fromDate.value == null)) Text(
-                            text = "Refresh"
-                        ) else Text(text = "Search")
+                            text = "Refresh",
+                            fontSize = 12.sp
+                        ) else Text(text = "Search",
+                            fontSize = 12.sp)
                     }
                 )
+
             }
             //viewModel.updatePager()
             if (viewModel.searchMode.value) {
-                LazyCollumn(viewModel, paddingValues = innerPadding, onclickfun = onclickfun)
+                val beers = viewModel.flow.collectAsLazyPagingItems()
+                LazyCollumn(beers, paddingValues = innerPadding, onclickfun = onclickfun)
+
             }
-            else
-                LazyCollumn(viewModel, paddingValues = innerPadding, onclickfun = onclickfun)
+            else {
+                val beers = viewModel.flow.collectAsLazyPagingItems()
+                LazyCollumn(beers, paddingValues = innerPadding, onclickfun = onclickfun)
             }
+        }
                 }
             }
 
@@ -147,8 +172,8 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel(), onclickfun: (Beer) ->
 
 
 @Composable
-fun LazyCollumn(viewmodel: MainViewModel, paddingValues: PaddingValues, onclickfun: (Beer) -> Unit) {
-    val beers = viewmodel.flow.collectAsLazyPagingItems()
+fun LazyCollumn(beers: LazyPagingItems<Beer>, paddingValues: PaddingValues, onclickfun: (Beer) -> Unit) {
+    //val beers = viewmodel.flow.collectAsLazyPagingItems()
     LazyColumn(contentPadding = paddingValues, modifier = Modifier.fillMaxSize()) {
         // if (!searchMode.value){
         items(beers) { beer ->
