@@ -7,6 +7,6 @@ import javax.inject.Singleton
 
 @Singleton
 class Repository @Inject constructor(private val apiService: ApiService) {
-    suspend fun SearchBeers (dateFrom : String, dateTo :String)=apiService.searchBeers(dateFrom,dateTo)
+    //suspend fun SearchBeers (dateFrom: String? = null, dateTo: String? =null)=apiService.searchBeers(dateFrom,dateTo)
     suspend fun getBeer (id : Int ) = apiService.fetchBeer(id.toString())
 }
