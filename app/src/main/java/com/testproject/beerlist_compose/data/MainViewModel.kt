@@ -23,10 +23,9 @@ class MainViewModel @Inject constructor(
     var toMonth: Int
     var toDate: MutableState<String?> = mutableStateOf(null)
     var fromDate: MutableState<String?> = mutableStateOf(null)
-    private val fromCalendar: Calendar = Calendar.getInstance()
+    private val fromCalendar = Calendar.getInstance()
     private val toCalendar = Calendar.getInstance()
     var searchMode: MutableState<Boolean> = mutableStateOf(false)
-
 
     var flow = Pager(
         PagingConfig(pageSize = 25)

@@ -13,7 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
@@ -57,6 +58,7 @@ fun MainScreen(
             )
         },
     ) { innerPadding ->
+
         Column {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -68,7 +70,8 @@ fun MainScreen(
                 Button(
                     onClick = {
                         fromDatePickerDialog.show()
-                    }, colors = ButtonDefaults.buttonColors(backgroundColor = Color(0XFF0F9D58)),
+                    },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0XFF0F9D58)),
                     modifier = Modifier.weight(0.8f)
                 ) {
                     Text(
@@ -148,6 +151,8 @@ fun MainScreen(
     }
 }
 
+
+
 @Composable
 fun LazyCollumn(
     beers: LazyPagingItems<Beer>,
@@ -158,6 +163,37 @@ fun LazyCollumn(
         items(beers) { beer ->
             LazyCollumnitem(beer = beer!!, onclickItem = { onclickfun(beer) })
         }
+        when (beers.loadState.append) {
+            is LoadState.NotLoading -> Unit
+            is LoadState.Loading -> item {
+                LoadingItem()
+            }
+        }
+        when (beers.loadState.refresh) {
+            is LoadState.NotLoading -> Unit
+            is LoadState.Loading -> item {
+                LoadingItem()
+            }
+        }
+    }
+}
+
+
+@Composable
+fun LoadingItem() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier
+                .width(50.dp)
+                .height(50.dp)
+                .padding(8.dp),
+            strokeWidth = 5.dp
+        )
     }
 }
 

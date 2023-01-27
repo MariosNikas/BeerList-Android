@@ -5,6 +5,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.testproject.beerlist_compose.data.ApiService
 import com.testproject.beerlist_compose.domain.Beer
+import kotlinx.coroutines.delay
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -25,6 +26,7 @@ class BeerSource @Inject constructor(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Beer> {
+        delay(2000)
         return try {
             if (!searchMode) {
                 val nextPage = params.key ?: 1
