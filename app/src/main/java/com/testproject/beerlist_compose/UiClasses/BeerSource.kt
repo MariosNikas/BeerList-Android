@@ -28,8 +28,8 @@ class BeerSource @Inject constructor(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Beer> {
         delay(2000)
         return try {
+            val nextPage = params.key ?: 1
             if (!searchMode) {
-                val nextPage = params.key ?: 1
                 val beerList = apiService.fetchBeers(nextPage.toString())
                 Log.d("fetchBeers", beerList.body().toString())
                 LoadResult.Page(
@@ -39,7 +39,6 @@ class BeerSource @Inject constructor(
                         .last().id.toInt() / beersPerPage + 1)
                 )
             } else {
-                val nextPage = params.key ?: 1
                 val beerList = apiService.searchBeers(fromDate, toDate, nextPage.toString())
                 Log.d(
                     "searchBeers",

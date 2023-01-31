@@ -27,10 +27,10 @@ fun SplashScreen(navController: NavController) {
         scale.animateTo(
             targetValue = 3f,
             animationSpec = tween(
-                durationMillis = 500,
+                durationMillis = 800,
                 easing = { OvershootInterpolator(2f).getInterpolation(it) })
         )
-        delay(1000)
+        delay(500)
         navController.navigate(Screen.Main.route) {
             popUpTo(Screen.Splash.route) {
                 inclusive = true

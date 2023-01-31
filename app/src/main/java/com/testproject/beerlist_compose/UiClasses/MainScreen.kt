@@ -58,7 +58,6 @@ fun MainScreen(
             )
         },
     ) { innerPadding ->
-
         Column {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -111,7 +110,6 @@ fun MainScreen(
                         viewModel.viewModelScope.launch {
                             viewModel.onSearch()
                         }
-
                     },
                     modifier = Modifier
                         .weight(1f),
@@ -151,8 +149,6 @@ fun MainScreen(
     }
 }
 
-
-
 @Composable
 fun LazyCollumn(
     beers: LazyPagingItems<Beer>,
@@ -177,7 +173,6 @@ fun LazyCollumn(
         }
     }
 }
-
 
 @Composable
 fun LoadingItem() {

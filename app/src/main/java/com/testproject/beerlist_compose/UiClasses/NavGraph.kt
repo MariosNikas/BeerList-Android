@@ -10,8 +10,6 @@ import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 
-
-//navigation graph class containing the logic for the navigation between the 2 screens
 @ExperimentalAnimationApi
 @Composable
 fun SetUpNavGraph(
@@ -21,7 +19,7 @@ fun SetUpNavGraph(
     {
         composable(
             route = Screen.Splash.route,
-            exitTransition = { fadeOut(tween(500)) })
+            popExitTransition = { fadeOut(tween(600)) })
         {
             SplashScreen(navController)
         }

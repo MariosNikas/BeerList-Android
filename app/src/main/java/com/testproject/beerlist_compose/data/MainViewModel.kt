@@ -2,8 +2,11 @@ package com.testproject.beerlist_compose.data
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.*
-import androidx.paging.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
 import com.testproject.beerlist_compose.UiClasses.BeerSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.*
